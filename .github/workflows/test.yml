@@ -1,0 +1,23 @@
+name: Risky PR Target Demo
+
+on:
+  pull_request_target:
+
+jobs:
+  demo:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout PR code
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.head.sha }}
+
+      - name: Run script from PR
+        run: |
+          echo "Running PR code"
+          bash script.sh
+
+      - name: Use secret (demo)
+        run: echo "Secret exists"
+        env:
+          MY_SECRET: ${{ secrets.MY_SECRET }}
