@@ -1,24 +1,27 @@
-name: Risky PR Target Demo
+name: Demo PR Target With Secret
 
 on:
   pull_request_target:
-  workflow_dispatch: 
+    types: [opened, synchronize, reopened]
+  workflow_dispatch:
 
 jobs:
   demo:
     runs-on: ubuntu-latest
+
     steps:
       - name: Checkout PR code
         uses: actions/checkout@v4
         with:
           ref: ${{ github.event.pull_request.head.sha }}
 
-      - name: Run script from PR
+      - name: Run PR script
         run: |
           echo "Running PR code"
-          bash script.sh
+          bash script.sh || echo "script.sh not found"
 
-      - name: Use secret (demo)
-        run: echo "Secret exists"
+      - name: Use dummy secret
+        run: |
+          echo "Secret is $MY_SECRET"
         env:
           MY_SECRET: ${{ secrets.MY_SECRET }}
